@@ -15,7 +15,9 @@ class PrototypesController < ApplicationController
 
   def create
     # binding.pry
-    if Prototype.create(prototype_params).valid?
+    @prototype = Prototype.new(prototype_params)
+    if @prototype.save
+    # if Prototype.create(prototype_params).valid?
       # Prototype.create(prototype_params)が重複している気がするが、if文に.valid?を付けないと、
       # 登録できない時でも処理がそのまま進んでトップページに飛ばされてしまうので。
 
@@ -32,7 +34,9 @@ class PrototypesController < ApplicationController
       # find使うと、DBからデータ持ってくるのかな？と思うけど、そうでは無いのか・・・。
       # でも、def updateで、登録失敗時に@prototype = Prototype.find(params[:id])としたら、DBからデータ持って来てたし。
       # ここ(create)との違いが分からないなー。
-      @prototype = Prototype.find(params[:id])
+      # 結局分からないから、入力したのは消えてしまうのには目をつぶる
+      # @prototype = Prototype.find(params[:id])
+      # binding.pry
       render :new
     end
   end
@@ -72,6 +76,7 @@ class PrototypesController < ApplicationController
 
   private
   def prototype_params
+    # binding.pry
     params.require(:prototype).permit(:title, :catch_copy, :concept, :image).merge(user_id: current_user.id)
   end
 end
